@@ -35,6 +35,8 @@ class DemoActivity : AppCompatActivity() {
     override fun onResume() {
         LOG.m() // note that entry into onResume is logged normally here.
         super.onResume()
+        LOG.w(Exception("this is a warning example.")) { "put additional warning info here." }
+        LOG.e(Exception("this is an error example.")) { "put additional error info here." }
     }
 
     fun testButtonAction(view: View) {

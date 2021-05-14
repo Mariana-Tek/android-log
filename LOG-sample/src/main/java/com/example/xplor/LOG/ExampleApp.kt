@@ -12,12 +12,15 @@ open class ExampleApp: Application() {
     override fun onCreate() {
         super.onCreate()
 
+        // ensure release builds always report WARNING, ERROR and WTF
+        LOGConfig.isEnabled = true
+        Timber.plant(Timber.DebugTree())
+
+        // debug builds enable advanced logging capability
         if (BuildConfig.DEBUG) {
-            LOGConfig.isEnabled = true
             LOGConfig.isDebug = true
             LOGConfig.EXCLUDE_LOG_PATTERNS = "DemoActivity.onStart" // example of excluding LOG messages
 
-            Timber.plant(Timber.DebugTree())
             LOG.d { "-".repeat(80) }
             LOG.d { "DEBUG ENABLED for " + BuildConfig.VERSION_NAME }
         }
