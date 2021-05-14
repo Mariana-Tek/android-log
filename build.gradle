@@ -1,0 +1,44 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+
+    ext.versions = [
+        'minSdk': 16,
+        'compileSdk': 30,
+        'kotlin': '1.4.31',
+        'androidPlugin': '4.2.0',
+        'androidTools': '30.0.3',
+    ]
+
+    ext.deps = [
+        androidPlugin: "com.android.tools.build:gradle:${versions.androidPlugin}",
+        'kotlin': [
+                'plugin': "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
+                'stdlib': "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}",
+        ],
+        annotations: 'org.jetbrains:annotations:19.0.0',
+        junit: 'junit:junit:4.13',
+        truth: 'com.google.truth:truth:0.41',
+        robolectric: 'org.robolectric:robolectric:4.5.1',
+        mockk: 'io.mockk:mockk:1.11.0',
+        timber: 'com.jakewharton.timber:timber:4.7.1'
+    ]
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:${versions.androidPlugin}"
+        //noinspection DifferentKotlinGradleVersion
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+

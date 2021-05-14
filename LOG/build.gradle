@@ -1,0 +1,34 @@
+apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
+
+android {
+  compileSdkVersion versions.compileSdk
+
+  defaultConfig {
+    minSdkVersion versions.minSdk
+    consumerProguardFiles 'consumer-proguard-rules.pro'
+  }
+
+  lintOptions {
+    textReport true
+    textOutput 'stdout'
+  }
+
+  kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_1_8.toString()
+  }
+}
+
+dependencies {
+  api deps.kotlin.stdlib
+  implementation deps.annotations
+  implementation deps.timber
+
+  testImplementation deps.annotations
+  testImplementation deps.junit
+  testImplementation deps.truth
+  testImplementation deps.robolectric
+  testImplementation deps.mockk
+  testImplementation deps.timber
+}
+

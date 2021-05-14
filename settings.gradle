@@ -1,0 +1,3 @@
+rootProject.name = "LOG"
+include ':LOG'
+include ':LOG-sample'
