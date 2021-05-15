@@ -3,7 +3,7 @@
 package com.example.xplor.LOG
 
 import xplor.LOG
-import xplor.LOGConfig
+import xplor.LOGconfig
 import android.app.Application
 import timber.log.Timber
 
@@ -13,13 +13,13 @@ open class ExampleApp: Application() {
         super.onCreate()
 
         // ensure release builds always report WARNING, ERROR and WTF
-        LOGConfig.isEnabled = true
+        LOGconfig.isEnabled = true
         Timber.plant(Timber.DebugTree())
 
         // debug builds enable advanced logging capability
         if (BuildConfig.DEBUG) {
-            LOGConfig.isDebug = true
-            LOGConfig.EXCLUDE_LOG_PATTERNS = "DemoActivity.onStart" // example of excluding LOG messages
+            LOGconfig.isDebug = true
+            LOGconfig.EXCLUDE_LOG_PATTERNS = "DemoActivity.onStart" // example of excluding LOG messages
 
             LOG.d { "-".repeat(80) }
             LOG.d { "DEBUG ENABLED for " + BuildConfig.VERSION_NAME }

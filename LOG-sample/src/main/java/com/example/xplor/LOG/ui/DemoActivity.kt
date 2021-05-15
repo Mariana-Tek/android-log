@@ -25,7 +25,7 @@ class DemoActivity : AppCompatActivity() {
         setContentView(R.layout.demo_activity)
     }
 
-    // NOTE: the ExampleApp.kt uses LOGConfig.EXCLUDE_LOG_PATTERNS to exclude this 'onStart' method from logging.
+    // NOTE: the ExampleApp.kt uses LOGconfig.EXCLUDE_LOG_PATTERNS to exclude this 'onStart' method from logging.
     override fun onStart() {
         LOG.m() // so this message will not be logged
         super.onStart()

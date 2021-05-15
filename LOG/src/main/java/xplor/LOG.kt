@@ -12,7 +12,7 @@ import timber.log.Timber
 
 /**
  * A robust [android.util.Log] replacement allowing for build-time filtering of a suite of custom tags.
- * From your app's Application, set `LOGConfig` for run-time filtering of your logcat logs.
+ * From your app's Application, set `LOGconfig` for run-time filtering of your logcat logs.
  *
  * @see [LOG.c]
  * @see [LOG.m]
@@ -60,10 +60,10 @@ object LOG {
 
     init {
         var negatingFlagExists = false
-        isExcluding = LOGConfig.EXCLUDE_LOG_PATTERNS.isNotEmpty()
+        isExcluding = LOGconfig.EXCLUDE_LOG_PATTERNS.isNotEmpty()
         // NOTE: only enable EXCLUDE_LOG_PATTERNS for Debug builds
-        if (LOGConfig.isDebug && LOGConfig.isEnabled && isExcluding) {
-            val excludeList = LOGConfig.EXCLUDE_LOG_PATTERNS.split(PIPE)
+        if (LOGconfig.isDebug && LOGconfig.isEnabled && isExcluding) {
+            val excludeList = LOGconfig.EXCLUDE_LOG_PATTERNS.split(PIPE)
             if (excludeList[0] == NEGATION_FLAG) {
                 negatingFlagExists = true
             }
@@ -83,7 +83,7 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun p(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGConfig.isDebug && included(t, PROVIDE, message())) {
+        if (LOGconfig.isDebug && included(t, PROVIDE, message())) {
             log(level = PROVIDE) { makeLogItem(t, message()) }
         }
     }
@@ -94,7 +94,7 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun c(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGConfig.isDebug && included(t, CREATE, message())) {
+        if (LOGconfig.isDebug && included(t, CREATE, message())) {
             log(level = CREATE) { makeLogItem(t, message()) }
         }
     }
@@ -105,7 +105,7 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun m(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGConfig.isDebug && included(t, METHOD, message())) {
+        if (LOGconfig.isDebug && included(t, METHOD, message())) {
             log(level = METHOD) { makeLogItem(t, message()) }
         }
     }
@@ -116,7 +116,7 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun s(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGConfig.isDebug && included(t, STATE, message())) {
+        if (LOGconfig.isDebug && included(t, STATE, message())) {
             log(level = STATE) { makeLogItem(t, message()) }
         }
     }
@@ -127,7 +127,7 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun v(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGConfig.isDebug && included(t, VERBOSE, message())) {
+        if (LOGconfig.isDebug && included(t, VERBOSE, message())) {
             log(level = VERBOSE) { makeLogItem(t, message()) }
         }
     }
@@ -139,7 +139,7 @@ object LOG {
      */
 
     fun d(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGConfig.isDebug && included(t, DEBUG, message())) {
+        if (LOGconfig.isDebug && included(t, DEBUG, message())) {
             log(level = DEBUG) { makeLogItem(t, message()) }
         }
     }
@@ -150,7 +150,7 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun i(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGConfig.isDebug && included(t, INFO, message())) {
+        if (LOGconfig.isDebug && included(t, INFO, message())) {
             log(level = INFO) { makeLogItem(t, message()) }
         }
     }
@@ -267,46 +267,46 @@ object LOG {
 }
 
 // in your Android Studio, enter XPLOR: into the Regex box for Logcat.  This will filter to show only LOG messages.
-object LOGConfig {
+object LOGconfig {
     // region configuration
     var isEnabled = true    // is LOG enabled?
     var isDebug = false     // is BuildConfig.DEBUG set in your app build?
 
-    // modify the LOGConfig.EXCLUDE_LOG_PATTERNS string with log patterns that you want excluded from logging.
+    // modify the LOGconfig.EXCLUDE_LOG_PATTERNS string with log patterns that you want excluded from logging.
     // be sure to separate each item with a vertical bar.
 
     // EXAMPLES:
     //
     // to exclude all "onStart" and "onResume" methods from being logged
-    // LOGConfig.EXCLUDE_LOG_PATTERNS = "onStart|onResume"
+    // LOGconfig.EXCLUDE_LOG_PATTERNS = "onStart|onResume"
     //
     // To exclude a file from logging, add the file name to the EXCLUDE_LOG_PATTERNS
     // To exclude a method add the method name, for example "DemoActivity.onStart" will exclude the onStart in DemoActivity
     // Here is an example to exclude just onStart in DemoActivity:
-    // LOGConfig.EXCLUDE_LOG_PATTERNS = "DemoActivity.onStart"
+    // LOGconfig.EXCLUDE_LOG_PATTERNS = "DemoActivity.onStart"
     //
     // if an exclude item is any of:  [ "PROVIDE", "CREATE", "METHOD", "STATE", "VERBOSE", "DEBUG", "INFO" ]
     // then all logging for the indicated log-level state(s) get blocked
     // Note that WARNING, ERROR and WTF can not be filtered like this
     //
     // Here is an example that discards all messages with log levels: PROVIDE, CREATE, METHOD, STATE, and VERBOSE
-    // LOGConfig.EXCLUDE_LOG_PATTERNS = "PROVIDE|CREATE|METHOD|STATE|VERBOSE"
+    // LOGconfig.EXCLUDE_LOG_PATTERNS = "PROVIDE|CREATE|METHOD|STATE|VERBOSE"
     //
     // You can exclude based on the Thread name.
     // Here is an example of discarding all LOG messages on the main Thread:
-    // LOGConfig.EXCLUDE_LOG_PATTERNS = "- main -"
+    // LOGconfig.EXCLUDE_LOG_PATTERNS = "- main -"
 
     // SPECIAL CASE:
     // it is possible to exclude everything *EXCEPT* some pattern (i.e. make LOG behave to INCLUDE ONLY)
     // This example uses '~' to only show LOG messages from the main Thread and discard everything else:
-    // LOGConfig.EXCLUDE_LOG_PATTERNS = "~|- main -"
+    // LOGconfig.EXCLUDE_LOG_PATTERNS = "~|- main -"
     //
-    // This is how the '~' character works when present in LOGConfig.EXCLUDE_LOG_PATTERNS:
+    // This is how the '~' character works when present in LOGconfig.EXCLUDE_LOG_PATTERNS:
     // If the first exclude item is '~' (tilde) then that inverts the meaning of everything..
     // so all LOG messages EXCEPT what's in the EXCLUDE_LOG_PATTERNS get discarded.
     //
     // in this example we only log the DemoActivity and everything else is discarded
-    // LOGConfig.EXCLUDE_LOG_PATTERNS = "~|DemoActivity"
+    // LOGconfig.EXCLUDE_LOG_PATTERNS = "~|DemoActivity"
 
     var EXCLUDE_LOG_PATTERNS = "" // nothing is excluded
     // endregion

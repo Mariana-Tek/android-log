@@ -11,7 +11,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import timber.log.Timber
 import xplor.LOG
-import xplor.LOGConfig
+import xplor.LOGconfig
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
@@ -33,9 +33,9 @@ class LOGTest {
 
     @Test
     fun testConfigEnabledAndExcludeNothing() {
-        LOGConfig.isEnabled = true
-        LOGConfig.isDebug = true
-        LOGConfig.EXCLUDE_LOG_PATTERNS = ""
+        LOGconfig.isEnabled = true
+        LOGconfig.isDebug = true
+        LOGconfig.EXCLUDE_LOG_PATTERNS = ""
 
         LOG.w(throwable) { message }
         LOG.d(throwable) { message }
@@ -50,9 +50,9 @@ class LOGTest {
 
     @Test
     fun testConfigEnabledAndExcludeDebug() {
-        LOGConfig.isEnabled = true
-        LOGConfig.isDebug = true
-        LOGConfig.EXCLUDE_LOG_PATTERNS = "DEBUG"
+        LOGconfig.isEnabled = true
+        LOGconfig.isDebug = true
+        LOGconfig.EXCLUDE_LOG_PATTERNS = "DEBUG"
 
         LOG.w(throwable) { message }
         LOG.d(throwable) { message }
@@ -70,9 +70,9 @@ class LOGTest {
 
     @Test
     fun testConfigEnabledAndExcludeEverything() {
-        LOGConfig.isEnabled = true
-        LOGConfig.isDebug = true
-        LOGConfig.EXCLUDE_LOG_PATTERNS = "INFO|DEBUG|VERBOSE"
+        LOGconfig.isEnabled = true
+        LOGconfig.isDebug = true
+        LOGconfig.EXCLUDE_LOG_PATTERNS = "INFO|DEBUG|VERBOSE"
 
         LOG.i { message }
         LOG.d { message }
@@ -87,9 +87,9 @@ class LOGTest {
 
     @Test
     fun testConfigEnabledAndIncludeEverything() {
-        LOGConfig.isEnabled = true
-        LOGConfig.isDebug = true
-        LOGConfig.EXCLUDE_LOG_PATTERNS = "~|INFO|DEBUG|VERBOSE"
+        LOGconfig.isEnabled = true
+        LOGconfig.isDebug = true
+        LOGconfig.EXCLUDE_LOG_PATTERNS = "~|INFO|DEBUG|VERBOSE"
 
         LOG.i { message }
         LOG.d { message }
