@@ -125,6 +125,27 @@ This last example only logs the DemoActivity and everything else is discarded:
 
         LOGconfig.EXCLUDE_LOG_PATTERNS = "~|DemoActivity"
 
+Dynamic Reconfiguration
+-----------------------
+
+LOG behavior is dynamically reconfigurable.  For example, you may only want to enable logging in specific sections of your app;
+and those sections may use different LOG configuration values.  To do this, when your app first starts, disable LOG in the Application:
+
+        LOGconfig.isEnabled = false
+        LOG.initialize()
+
+Then when the code enters a critical section, initialize LOG as desired. For example:
+
+        LOGconfig.isEnabled = true
+        LOGconfig.isDebug = true
+        LOGconfig.EXCLUDE_LOG_PATTERNS = "~|INFO|DEBUG|VERBOSE"
+        LOG.initialize()
+
+When you leave a critical section, disable LOG again, like this:
+
+        LOGconfig.isEnabled = false
+        LOG.initialize()
+
 Example
 -------
 
