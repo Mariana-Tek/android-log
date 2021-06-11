@@ -49,16 +49,22 @@ object LOG {
     private const val DOT = '.'
     private const val SPACE = " "
     private val NO_MESSAGE: () -> String = { SPACE }
-    private val EXCLUDE_LOG_PATTERNS: MutableList<String> = mutableListOf()
-    private val isExcluding: Boolean
+    private var EXCLUDE_LOG_PATTERNS: MutableList<String> = mutableListOf()
+    private var isExcluding: Boolean = false
     /**
      * true if [EXCLUDE_LOG_PATTERNS] should be inverted to actually include patterns instead.
      * Signified by the presence of [NEGATION_FLAG] in EXCLUDE_LOG_PATTERNS
      */
-    private val shouldInvertExclude: Boolean
+    private var shouldInvertExclude: Boolean = false
     // endregion
 
+    // region Initialization
     init {
+        initialize()
+    }
+
+    fun initialize() {
+        EXCLUDE_LOG_PATTERNS = mutableListOf()
         var negatingFlagExists = false
         isExcluding = LOGconfig.EXCLUDE_LOG_PATTERNS.isNotEmpty()
         // NOTE: only enable EXCLUDE_LOG_PATTERNS for Debug builds
@@ -75,6 +81,7 @@ object LOG {
         }
         shouldInvertExclude = negatingFlagExists
     }
+    // endregion
 
     // region Public API, expected LOG.* methods
     /**
@@ -83,7 +90,7 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun p(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGconfig.isDebug && included(t, PROVIDE, message())) {
+        if (LOGconfig.isEnabled && LOGconfig.isDebug && included(t, PROVIDE, message())) {
             log(level = PROVIDE) { makeLogItem(t, message()) }
         }
     }
@@ -94,7 +101,7 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun c(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGconfig.isDebug && included(t, CREATE, message())) {
+        if (LOGconfig.isEnabled && LOGconfig.isDebug && included(t, CREATE, message())) {
             log(level = CREATE) { makeLogItem(t, message()) }
         }
     }
@@ -105,7 +112,7 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun m(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGconfig.isDebug && included(t, METHOD, message())) {
+        if (LOGconfig.isEnabled && LOGconfig.isDebug && included(t, METHOD, message())) {
             log(level = METHOD) { makeLogItem(t, message()) }
         }
     }
@@ -116,7 +123,7 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun s(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGconfig.isDebug && included(t, STATE, message())) {
+        if (LOGconfig.isEnabled && LOGconfig.isDebug && included(t, STATE, message())) {
             log(level = STATE) { makeLogItem(t, message()) }
         }
     }
@@ -127,7 +134,7 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun v(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGconfig.isDebug && included(t, VERBOSE, message())) {
+        if (LOGconfig.isEnabled && LOGconfig.isDebug && included(t, VERBOSE, message())) {
             log(level = VERBOSE) { makeLogItem(t, message()) }
         }
     }
@@ -139,7 +146,7 @@ object LOG {
      */
 
     fun d(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGconfig.isDebug && included(t, DEBUG, message())) {
+        if (LOGconfig.isEnabled && LOGconfig.isDebug && included(t, DEBUG, message())) {
             log(level = DEBUG) { makeLogItem(t, message()) }
         }
     }
@@ -150,7 +157,7 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun i(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        if (LOGconfig.isDebug && included(t, INFO, message())) {
+        if (LOGconfig.isEnabled && LOGconfig.isDebug && included(t, INFO, message())) {
             log(level = INFO) { makeLogItem(t, message()) }
         }
     }
@@ -161,7 +168,9 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun w(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        log(level = WARNING) { makeLogItem(t, message()) }
+        if (LOGconfig.isEnabled) {
+            log(level = WARNING) { makeLogItem(t, message()) }
+        }
     }
 
     /**
@@ -170,7 +179,9 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun e(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        log(level = ERROR) { makeLogItem(t, message()) }
+        if (LOGconfig.isEnabled) {
+            log(level = ERROR) { makeLogItem(t, message()) }
+        }
     }
 
     /**
@@ -179,7 +190,9 @@ object LOG {
      *  @param message a message that will be evaluated lazily when the message is printed
      */
     fun wtf(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
-        log(level = WTF) { makeLogItem(t, message()) }
+        if (LOGconfig.isEnabled) {
+            log(level = WTF) { makeLogItem(t, message()) }
+        }
     }
     // endregion
 
@@ -269,6 +282,13 @@ object LOG {
 // in your Android Studio, enter XPLOR: into the Regex box for Logcat.  This will filter to show only LOG messages.
 object LOGconfig {
     // region configuration
+
+    fun initialize() {
+        LOGconfig.isEnabled = true
+        LOGconfig.isDebug = false
+        LOGconfig.EXCLUDE_LOG_PATTERNS = ""
+    }
+
     var isEnabled = true    // is LOG enabled?
     var isDebug = false     // is BuildConfig.DEBUG set in your app build?
 

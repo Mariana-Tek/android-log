@@ -7,6 +7,12 @@ android {
   defaultConfig {
     minSdkVersion versions.minSdk
     consumerProguardFiles 'consumer-proguard-rules.pro'
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunnerArguments clearPackageData: 'true'
+  }
+
+  testOptions {
+    execution 'ANDROIDX_TEST_ORCHESTRATOR'
   }
 
   lintOptions {
@@ -30,5 +36,7 @@ dependencies {
   testImplementation deps.robolectric
   testImplementation deps.mockk
   testImplementation deps.timber
+  testImplementation deps.runner
+  testImplementation deps.orchestrator
 }
 
