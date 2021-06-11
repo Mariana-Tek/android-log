@@ -199,6 +199,13 @@ Use this command to generate a Release keystore for testing:
 
         keytool -genkey -v -keystore test.keystore -alias alias_name -keyalg RSA -sigalg SHA1withRSA -keysize 2048 -validity 10000
 
+Known Issues
+------------
+
+The use of *inline* and *reified* produce invalid line numbers in LOG.
+The issue is documented here: https://youtrack.jetbrains.com/issue/KT-12896
+and here: https://youtrack.jetbrains.com/issue/KT-28542
+
 License
 -------
 
