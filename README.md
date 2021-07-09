@@ -6,7 +6,7 @@ LOG aims to make logs easily readable, filterable and navigable. We achieve read
 for the date, time and package name. This is followed by the LOG level, the class and method, the active thread, a file name:line number, and any extra information.
 LOG automatically creates most of these elements for you. The file name portion is clickable and will navigate to the file at a line number.
 A lambda can be associated with each LOG line to generate and include extra information. LOG lines are automatically truncated at 3900 characters to avoid
-issues with Timber or the underlying android.util.Log class.
+issues with Timber or the underlying android.util.Log class. LOG is easily integrated with Sentry.
 
 LOG levels are extensible. Currently 10 predefined LOG levels exist. These are:
 
@@ -145,6 +145,70 @@ When you leave a critical section, disable LOG again, like this:
 
         LOGconfig.isEnabled = false
         LOG.initialize()
+
+Sentry Integration
+------------------
+
+This logger is easily integrated with Sentry.  For Sentry integration, set the LOG variable 'sentryCallback'
+to point to your Sentry implementation.  The example below shows a possible implementation.
+
+	class SentryHandler() {
+
+		companion object {
+
+			fun initializeSentry(clientName: String, environment: String, dsn: String) {
+				LOG.m()
+				LOG.sentryCallback = Companion::reportToSentry
+				val options = SentryOptions()
+				options.dsn = dsn
+				options.isAttachStacktrace = true
+				options.enableUncaughtExceptionHandler = true
+				options.setDebug(BuildConfig.DEBUG)
+				options.environment = environment
+				options.sentryClientName = clientName
+				options.serverName = clientName
+				Sentry.init(options)
+			}
+
+			fun reportToSentry(t: Throwable?, tag: String, message: String) {
+				LOG.m()
+				if (Sentry.isEnabled()) {
+					Sentry.setTag("info", tag)
+					Sentry.setTag("message", message)
+					val sentryMessage = Message()
+					sentryMessage.message = message
+					val event = SentryEvent()
+					if (t != null) {
+						val sentryException = SentryException()
+						sentryException.threadId = Thread.currentThread().id
+						sentryException.value = t.message
+						//sentryException.stacktrace = getSentryStackTrace()
+						event.exceptions = listOf(sentryException)
+					}
+					event.level = when (tag) {
+						LOG.WTF -> SentryLevel.FATAL
+						LOG.ERROR -> SentryLevel.ERROR
+						LOG.WARN -> SentryLevel.WARNING
+						LOG.DEBUG -> SentryLevel.DEBUG
+						else -> SentryLevel.INFO
+					}
+					event.message = sentryMessage
+					addBreadcrumbs(event)
+					Sentry.captureEvent(event)
+				}
+			}
+
+			// Capture the last 50 lines of logcat to use as Breadcrumbs
+			private fun addBreadcrumbs(event: SentryEvent) {
+				LOG.m()
+				val process = Runtime.getRuntime().exec("logcat -t 50 --pid ${android.os.Process.myPid()} *:D")
+				val lines = process.inputStream.bufferedReader().use { it.readText() }.split("\n")
+				for (line in lines) {
+					event.addBreadcrumb(line)
+				}
+			}
+		}
+	}
 
 Example
 -------

@@ -29,16 +29,16 @@ import timber.log.Timber
 object LOG {
 
     // region TAGS!
-    private const val CREATE  = " CREATE"
-    private const val METHOD  = " METHOD"
-    private const val STATE   = "  STATE"
-    private const val PROVIDE = "PROVIDE"
-    private const val VERBOSE = "VERBOSE"
-    private const val DEBUG   = "  DEBUG"
-    private const val INFO    = "   INFO"
-    private const val WARNING = "WARNING"
-    private const val ERROR   = "* ERROR"
-    private const val WTF     = "*!WTF!*"
+    const val CREATE  = " CREATE"
+    const val METHOD  = " METHOD"
+    const val STATE   = "  STATE"
+    const val PROVIDE = "PROVIDE"
+    const val VERBOSE = "VERBOSE"
+    const val DEBUG   = "  DEBUG"
+    const val INFO    = "   INFO"
+    const val WARNING = "WARNING"
+    const val ERROR   = "* ERROR"
+    const val WTF     = "*!WTF!*"
     // endregion
 
     // region Helper vals
@@ -169,7 +169,9 @@ object LOG {
      */
     fun w(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
         if (LOGconfig.isEnabled) {
-            log(level = WARNING) { makeLogItem(t, message()) }
+            val message = message()
+            log(level = WARNING) { makeLogItem(t, message) }
+            sentryCallback(t, WARNING, message)
         }
     }
 
@@ -180,7 +182,9 @@ object LOG {
      */
     fun e(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
         if (LOGconfig.isEnabled) {
-            log(level = ERROR) { makeLogItem(t, message()) }
+            val message = message()
+            log(level = ERROR) { makeLogItem(t, message) }
+            sentryCallback(t, ERROR, message)
         }
     }
 
@@ -191,7 +195,9 @@ object LOG {
      */
     fun wtf(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
         if (LOGconfig.isEnabled) {
-            log(level = WTF) { makeLogItem(t, message()) }
+            val message = message()
+            log(level = WTF) { makeLogItem(t, message) }
+            sentryCallback(t, WTF, message)
         }
     }
     // endregion
@@ -277,7 +283,20 @@ object LOG {
         return t to message
     }
     // endregion
+
+    // region callback for Sentry
+    // to integrate with Sentry, change this variable to point to your Sentry logger
+    var sentryCallback = SentryCallbackStub.Companion::reportToSentryStub
+    // endregion
 }
+
+// region Sentry callback Stub
+class SentryCallbackStub {
+    companion object {
+        fun reportToSentryStub(t: Throwable?, tag: String, message: String) {}
+    }
+}
+// endregion
 
 // in your Android Studio, enter XPLOR: into the Regex box for Logcat.  This will filter to show only LOG messages.
 object LOGconfig {
