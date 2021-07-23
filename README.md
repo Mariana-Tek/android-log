@@ -149,7 +149,7 @@ When you leave a critical section, disable LOG again, like this:
 Sentry Integration
 ------------------
 
-This logger is easily integrated with Sentry.  For Sentry integration, set the LOG variable 'sentryCallback'
+This logger is easily integrated with Sentry.  For Sentry integration, set the LOG variable 'theSentryCallback'
 to point to your Sentry implementation.  The example below shows a possible implementation.
 
 	class SentryHandler() {
@@ -158,7 +158,7 @@ to point to your Sentry implementation.  The example below shows a possible impl
 
 			fun initializeSentry(clientName: String, environment: String, dsn: String) {
 				LOG.m()
-				LOG.sentryCallback = Companion::reportToSentry
+				LOG.theSentryCallback = Companion::reportToSentry
 				val options = SentryOptions()
 				options.dsn = dsn
 				options.isAttachStacktrace = true

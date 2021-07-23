@@ -171,7 +171,7 @@ object LOG {
         if (LOGconfig.isEnabled) {
             val message = message()
             log(level = WARNING) { makeLogItem(t, message) }
-            sentryCallback(t, WARNING, message)
+            theSentryCallback(t, WARNING, message)
         }
     }
 
@@ -184,7 +184,7 @@ object LOG {
         if (LOGconfig.isEnabled) {
             val message = message()
             log(level = ERROR) { makeLogItem(t, message) }
-            sentryCallback(t, ERROR, message)
+            theSentryCallback(t, ERROR, message)
         }
     }
 
@@ -197,7 +197,7 @@ object LOG {
         if (LOGconfig.isEnabled) {
             val message = message()
             log(level = WTF) { makeLogItem(t, message) }
-            sentryCallback(t, WTF, message)
+            theSentryCallback(t, WTF, message)
         }
     }
     // endregion
@@ -286,7 +286,7 @@ object LOG {
 
     // region callback for Sentry
     // to integrate with Sentry, change this variable to point to your Sentry logger
-    var sentryCallback = SentryCallbackStub.Companion::reportToSentryStub
+    var theSentryCallback = SentryCallbackStub.Companion::reportToSentryStub
     // endregion
 }
 
