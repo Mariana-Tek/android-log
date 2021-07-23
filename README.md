@@ -151,6 +151,7 @@ Sentry Integration
 
 This logger is easily integrated with [Sentry](https://sentry.io).  For Sentry integration, set the LOG variable 'theSentryCallback'
 to point to your Sentry implementation.  The example below shows a possible implementation.  You may also want to add a default exception handler.
+Note that only ERROR and WTF messages are currently sent to Sentry.
 
     class SentryHandler() {
 

@@ -169,9 +169,7 @@ object LOG {
      */
     fun w(t: Throwable? = null, message: () -> String = NO_MESSAGE) {
         if (LOGconfig.isEnabled) {
-            val message = message()
-            log(level = WARNING) { makeLogItem(t, message) }
-            theSentryCallback(t, WARNING, message)
+            log(level = WARNING) { makeLogItem(t, message()) }
         }
     }
 
