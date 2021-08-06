@@ -40,11 +40,13 @@ use this syntax: **LOG.m { "argument1=$argument1, argument2=$argument2, ..." }**
 Each LOG statement can have an optional *Throwable* parameter that will also log the Exception. Here are some examples showing the various syntax forms.
 These examples are applicable to all LOG levels (not just DEBUG):
 
+```Kotlin
         LOG.d() // log a simple DEBUG message
         LOG.d { "additional $information" } // the 'information' object is included
         LOG.d(Exception("this is an excepton!")) // log an exeption
         // log an Exception and also include the 'information' object
         LOG.d(Exception("this is an excepton!")) { "additional $information" }
+```
 
 LOG requires the *Timber* library. Your build.gradle must include Timber:
 
@@ -68,6 +70,7 @@ Note that when enabling LOG, you also need a **Timber Tree** planted before outp
 You should create an *Application* class that initializes the logger.  The example below shows how to setup your Application for both Release and Debug logging.
 If enabled, *Release* logging defaults to only showing ERROR, WARNING and WTF messages. *Debug* logging is powerful with custom levels and filtering capability.
 
+```Kotlin
         open class ExampleApp: Application() {
         
             override fun onCreate() {
@@ -86,6 +89,7 @@ If enabled, *Release* logging defaults to only showing ERROR, WARNING and WTF me
                 }
             }
         }
+```
 
 Filtering
 ---------
@@ -96,34 +100,46 @@ or alternatively configure it with patterns to *include only* when logging. **Se
 
 For example, to exclude all "onStart" and "onResume" methods from being logged everywhere:
 
+```Kotlin
         LOGconfig.EXCLUDE_LOG_PATTERNS = "onStart|onResume"
+```
 
 To exclude a file from logging, add the *file name* to the EXCLUDE_LOG_PATTERNS.  To exclude a method add the *method name*.
 For example "DemoActivity.onStart" will exclude the onStart method only in DemoActivity. Whereas just "DemoActivity" will exclude
 all logging from the DemoActivity.
 
+```Kotlin
         LOGconfig.EXCLUDE_LOG_PATTERNS = "DemoActivity.onStart"
+```
 
 If an exclude item is any of:  [ "PROVIDE", "CREATE", "METHOD", "STATE", "VERBOSE", "DEBUG", "INFO" ]
 then all logging for the indicated log-level state(s) get blocked.  Note that WARNING, ERROR and WTF can not be filtered like this
 
 This example below discards all messages with log levels: PROVIDE, CREATE, METHOD, STATE, and VERBOSE
 
+```Kotlin
         LOGconfig.EXCLUDE_LOG_PATTERNS = "PROVIDE|CREATE|METHOD|STATE|VERBOSE"
+```
 
 You can exclude based on the Thread name.  This example discards all LOG messages originating on the main Thread:
 
+```Kotlin
         LOGconfig.EXCLUDE_LOG_PATTERNS = "- main -"
+```
 
 The meaning for EXCLUDE_LOG_PATTERNS is inverted if the first item is a tilde ('\~') character.
 It is possible to exclude everything *except* some pattern (i.e. make LOG behave to INCLUDE ONLY)
 This example uses '\~' to only show LOG messages from the main Thread and discard everything else:
 
+```Kotlin
         LOGconfig.EXCLUDE_LOG_PATTERNS = "~|- main -"
+```
 
 This last example only logs the DemoActivity and everything else is discarded:
 
+```Kotlin
         LOGconfig.EXCLUDE_LOG_PATTERNS = "~|DemoActivity"
+```
 
 Dynamic Reconfiguration
 -----------------------
@@ -131,20 +147,26 @@ Dynamic Reconfiguration
 LOG behavior is dynamically reconfigurable.  For example, you may only want to enable logging in specific sections of your app;
 and those sections may use different LOG configuration values.  To do this, when your app first starts, disable LOG in the Application:
 
+```Kotlin
         LOGconfig.isEnabled = false
         LOG.initialize()
+```
 
 Then when the code enters a critical section, initialize LOG as desired. For example:
 
+```Kotlin
         LOGconfig.isEnabled = true
         LOGconfig.isDebug = true
         LOGconfig.EXCLUDE_LOG_PATTERNS = "~|INFO|DEBUG|VERBOSE"
         LOG.initialize()
+```
 
 When you leave a critical section, disable LOG again, like this:
 
+```Kotlin
         LOGconfig.isEnabled = false
         LOG.initialize()
+```
 
 Sentry Integration
 ------------------
@@ -153,6 +175,7 @@ This logger is easily integrated with [Sentry](https://sentry.io).  For Sentry i
 to point to your Sentry implementation.  The example below shows a possible implementation.  You may also want to add a default exception handler.
 Note that only ERROR and WTF messages are currently sent to Sentry.
 
+```Kotlin
     class SentryHandler() {
 
         companion object {
@@ -218,6 +241,7 @@ Note that only ERROR and WTF messages are currently sent to Sentry.
             }
         }
     }
+```
 
 Example
 -------
@@ -270,7 +294,9 @@ Below is Android Studio logcat output produced from the included LOG-sample proj
 If you want to build the LOG-sample project for Release testing, you need to generate a keystore and modify the LOG-sample/build.gradle to include that.
 Use this command to generate a Release keystore for testing:
 
+```shell
         keytool -genkey -v -keystore test.keystore -alias alias_name -keyalg RSA -sigalg SHA1withRSA -keysize 2048 -validity 10000
+```
 
 Known Issues
 ------------
