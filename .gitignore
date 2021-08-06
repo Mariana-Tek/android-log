@@ -6,6 +6,7 @@
 /build
 LOG/build
 LOG-sample/build
+LOG-sample/.idea
 /captures
 .externalNativeBuild
 .cxx
