@@ -11,3 +11,4 @@ LOG-sample/.idea
 .externalNativeBuild
 .cxx
 local.properties
+/target
