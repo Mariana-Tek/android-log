@@ -45,6 +45,8 @@
     </distributionManagement>
 
     <build>
+        <sourceDirectory>LOG/src</sourceDirectory>
+        <testSourceDirectory>LOG/src/test</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
