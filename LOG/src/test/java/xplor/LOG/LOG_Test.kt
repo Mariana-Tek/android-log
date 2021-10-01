@@ -1,4 +1,4 @@
-package Xplor.LOG
+package xplor.LOG
 
 import io.mockk.Ordering
 import io.mockk.mockkStatic
