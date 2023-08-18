@@ -2,6 +2,33 @@
 
 This is an extensible Kotlin Android logger which provides utility on top of Jake Warton's [Timber](https://github.com/JakeWharton/timber) logger library.
 
+LOG is available via JitPack at https://jitpack.io/#Mariana-Tek/android-log/0.1.1
+
+TLDR
+```
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://jitpack.io")
+    }
+
+dependencies {
+    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation("com.github.Mariana-Tek:android-log:0.1.1")
+}
+
+code to use for initialization:
+
+        Timber.plant(Timber.DebugTree())
+        LOGconfig.isEnabled = true
+        LOGconfig.isDebug = true
+
+sample usage:
+
+        LOG.s { "Hello World!" }
+
+```
+
 LOG aims to make logs easily readable, filterable and navigable. We achieve readability by enforcing a line format. Each LOG line uses a fixed size
 for the date, time and package name. This is followed by the LOG level, the class and method, the active thread, a file name:line number, and any extra information.
 LOG automatically creates most of these elements for you. The file name portion is clickable and will navigate to the file at a line number.
@@ -16,7 +43,7 @@ LOG levels are extensible. Currently 10 predefined LOG levels exist. These are:
  *  LOG.p   - **PROVIDE** (Dagger2 @PROVIDES execution)
  *  LOG.v   - **VERBOSE** (a Verbose message)
  *  LOG.d   - **DEBUG** (a Debug message)
- *  LOG.i   - **INFO** (an Info message)
+ *  LOG.i   - **INFO** (an Info message and to Sentry)
  *  LOG.w   - **WARNING** (a Warning message)
  *  LOG.e   - **ERROR** (an Error)
  *  LOG.wtf - **WTF** (What a Terrible Failure)

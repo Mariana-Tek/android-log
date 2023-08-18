@@ -1,15 +1,10 @@
 *.iml
 .gradle
+.DS_Store
 /local.properties
 /.idea
-.DS_Store
 /build
-LOG/build
-LOG-sample/build
-LOG-sample/.idea
-LOG-sonatype/target
 /captures
 .externalNativeBuild
 .cxx
 local.properties
-/target
