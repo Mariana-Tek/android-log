@@ -2,7 +2,7 @@
 
 This is an extensible Kotlin Android logger which provides utility on top of Jake Warton's [Timber](https://github.com/JakeWharton/timber) logger library.
 
-LOG is available via JitPack at https://jitpack.io/#Mariana-Tek/android-log/0.1.1
+LOG is available via JitPack at https://jitpack.io/#Mariana-Tek/android-log/0.1.2
 
 TLDR
 ```
@@ -14,7 +14,7 @@ TLDR
 
 dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
-    implementation("com.github.Mariana-Tek:android-log:0.1.1")
+    implementation("com.github.Mariana-Tek:android-log:0.1.2")
 }
 
 code to use for initialization:
