@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.github.jitpack"
-version = "0.1.2"
+version = "0.1.3"
 
 android {
     namespace = "com.xplor.log"
