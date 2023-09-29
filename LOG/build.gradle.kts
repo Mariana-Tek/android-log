@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.github.jitpack"
-version = "0.1.2"
+version = "0.1.3"
 
 android {
     namespace = "com.xplor.log"
@@ -50,7 +50,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("org.slf4j:slf4j-nop:2.0.7")
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    api("com.jakewharton.timber:timber:5.0.1")
 
     testImplementation("org.robolectric:robolectric:4.10.3")
     testImplementation("junit:junit:4.13.2")
